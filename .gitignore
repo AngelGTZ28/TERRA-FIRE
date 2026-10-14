@@ -216,3 +216,30 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ==============================================================================
+# TERRA-FIRE: Data Engineering Lab Storage Rules
+# ==============================================================================
+# Raw and heavy external datasets (stored in TERRAFIRE-db or Cloud Lakehouse)
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/README.md
+
+# Intermediate temporary ETL cache
+data/intermediate/*
+!data/intermediate/.gitkeep
+
+# Exclude heavy production Parquet matrices (>100MB) from git tracking
+data/processed/*.tar.gz
+data/processed/*.zip
+data/processed/*.nc
+
+# Binary datasets & big tables
+*.xlsx
+*.parquet.tmp
+*.db
+*.sqlite
+
+# Keep representative small sample data in repository
+!data/sample/
+!data/sample/*
