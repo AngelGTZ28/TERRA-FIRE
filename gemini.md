@@ -22,19 +22,19 @@
 ---
 
 ## 🏛️ 2. Architectural Ecosystem & Workspace Directories
-The project is decoupled into three peer workspaces located in `C:\Users\angel\Documents\Workspace\`:
+The project is decoupled into three peer workspaces located in `/home/angel/Workspace/TERRA-FIRE-PROJECT/`:
 
 ```text
-Workspace/
+TERRA-FIRE-PROJECT/
 ├── TERRA-FIRE/             # 🛠️ GitHub Code Repository (ETL Pipeline, ML, PWA)
-├── TERRAFIRE-db/           # 📦 External Raw Datasets Storage (>72 MB)
+├── TERRA-FIRE-DATABASES/   # 📦 External Raw Datasets Storage (>72 MB)
 └── TerraFire_vault/        # 📚 Obsidian Knowledge Vault & Official Academic Reports
 ```
 
 ### The 4 Decoupled Computing Layers:
 1. **Layer 1: Project Repository (GitHub):** Source code (`src/`), executable notebooks (`notebooks/`), metadata dictionaries (`metadata/`), `.gitignore`, `requirements.txt`, small representative samples (`data/sample/`), and compressed Parquet artifacts (`data/processed/`).
 2. **Layer 2: Development Environment (GitHub Codespaces / VS Code):** Linux/Windows workstation environment running Python 3.12 and pinned dependencies.
-3. **Layer 3: Data Storage:** Heavy raw tables (>72 MB) stored externally in `TERRAFIRE-db/` (excluded from Git).
+3. **Layer 3: Data Storage:** Heavy raw tables (>72 MB) stored externally in `TERRA-FIRE-DATABASES/` (excluded from Git).
 4. **Layer 4: Data Processing:** Vectorized in-memory compute infrastructure (Python + Pandas/PyArrow) using a **Scaled Data Pipeline** architecture (processing in <3.5 s without unnecessary cluster overhead).
 
 ---
@@ -43,11 +43,11 @@ Workspace/
 
 | Dataset | Provider | Records & Size | Storage Path | Ingestion Peculiarities & Mitigations |
 | :--- | :--- | :---: | :--- | :--- |
-| **CONAFOR Historical Fires (2012–2025)** | CONAFOR / SEMARNAT | 101,003 rows<br>(18.6 MB `.xlsx`) | `TERRAFIRE-db/CONAFOR_Incendios_2012_2025.xlsx` | • Headers contain corrupted non-ASCII accents (`'Ao'`, `'Herbceo'`).<br>• 48 records have positive longitudes (inverted by $\times -1.0$).<br>• 946 null vegetation rows imputed as `'No Especificado'`.<br>• Strata hectares nulls imputed as `0.0` ha. |
-| **NASA FIRMS VIIRS S-NPP (2023–2024)** | NASA LANCE / FIRMS | 657,791 rows<br>(52.4 MB `.csv`) | `TERRAFIRE-db/NASA_FIRMS_VIIRS_SNPP_*.csv` | • `acq_time` is integer (e.g. `820`); zero-padded to `08:20:00` and concatenated with `acq_date` to form UTC timestamp.<br>• Filtered to Mexico bounding box $[14.0, 33.5]^\circ\text{N}, [-118.5, -86.0]^\circ\text{W}$. |
-| **ECMWF ERA5-Land Hourly** | Copernicus C3S | 17,544 rows<br>(0.93 MB `.csv`) | `TERRAFIRE-db/ERA5_Land_Hourly_SierraFria_2023_2024.csv` | • **Crucial:** Lines 1–2 contain station metadata; line 3 is blank; table header is at line 4. Must be loaded using `skiprows=3`.<br>• Local time is GMT-6; UTC offset (+6h) added for satellite alignment. |
-| **Copernicus DEM (GLO-30)** | ESA / Airbus | 1°x1° Tile<br>(35.4 MB `.tif`) | `TERRAFIRE-db/Copernicus_DSM_*.dem` | • 32-bit float elevation values relative to EGM2008.<br>• Used to compute slope ($0^\circ–90^\circ$), aspect, and lapse-rate thermal downscaling. |
-| **Copernicus Sentinel-2 MSI L2A** | ESA / Microsoft PC | Scene Item<br>(0.03 MB `.json`) | `TERRAFIRE-db/Sentinel2_L2A_STAC_Item_*.json` | • Multispectral surface reflectance (B04 Red, B08 NIR, B11 SWIR-1, B12 SWIR-2).<br>• Derives Live Fuel Moisture Content (LFMC) via NDMI, SAVI, and NBR. |
+| **CONAFOR Historical Fires (2012–2025)** | CONAFOR / SEMARNAT | 101,003 rows<br>(18.6 MB `.xlsx`) | `TERRA-FIRE-DATABASES/CONAFOR_Incendios_2012_2025.xlsx` | • Headers contain corrupted non-ASCII accents (`'Ao'`, `'Herbceo'`).<br>• 48 records have positive longitudes (inverted by $\times -1.0$).<br>• 946 null vegetation rows imputed as `'No Especificado'`.<br>• Strata hectares nulls imputed as `0.0` ha. |
+| **NASA FIRMS VIIRS S-NPP (2023–2024)** | NASA LANCE / FIRMS | 657,791 rows<br>(52.4 MB `.csv`) | `TERRA-FIRE-DATABASES/NASA_FIRMS_VIIRS_SNPP_*.csv` | • `acq_time` is integer (e.g. `820`); zero-padded to `08:20:00` and concatenated with `acq_date` to form UTC timestamp.<br>• Filtered to Mexico bounding box $[14.0, 33.5]^\circ\text{N}, [-118.5, -86.0]^\circ\text{W}$. |
+| **ECMWF ERA5-Land Hourly** | Copernicus C3S | 17,544 rows<br>(0.93 MB `.csv`) | `TERRA-FIRE-DATABASES/ERA5_Land_Hourly_SierraFria_2023_2024.csv` | • **Crucial:** Lines 1–2 contain station metadata; line 3 is blank; table header is at line 4. Must be loaded using `skiprows=3`.<br>• Local time is GMT-6; UTC offset (+6h) added for satellite alignment. |
+| **Copernicus DEM (GLO-30)** | ESA / Airbus | 1°x1° Tile<br>(35.4 MB `.tif`) | `TERRA-FIRE-DATABASES/Copernicus_DSM_*.dem` | • 32-bit float elevation values relative to EGM2008.<br>• Used to compute slope ($0^\circ–90^\circ$), aspect, and lapse-rate thermal downscaling. |
+| **Copernicus Sentinel-2 MSI L2A** | ESA / Microsoft PC | Scene Item<br>(0.03 MB `.json`) | `TERRA-FIRE-DATABASES/Sentinel2_L2A_STAC_Item_*.json` | • Multispectral surface reflectance (B04 Red, B08 NIR, B11 SWIR-1, B12 SWIR-2).<br>• Derives Live Fuel Moisture Content (LFMC) via NDMI, SAVI, and NBR. |
 
 ---
 
@@ -93,9 +93,9 @@ $$v_{10} = -(ws_{kmh} / 3.6) \cdot \cos(\theta_{rad}) \quad (\text{meridional, s
 ## 💻 6. Quick Execution & Command Reference
 
 ### Python Environment Setup
-```powershell
+```bash
 # Navigate to repo
-cd C:\Users\angel\Documents\Workspace\TERRA-FIRE
+cd /home/angel/Workspace/TERRA-FIRE-PROJECT/TERRA-FIRE
 
 # Install dependencies
 pip install -r requirements.txt
