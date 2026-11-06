@@ -1,14 +1,14 @@
 # 🔥 TERRA-FIRE: Predictive Wildfire Intelligence Engine
-## 🧪 Activity 3 & 4: Data Engineering & Data Intelligence Lab
+## 🧪 Activities 3, 4, 5 & 6: Data Engineering, Data Intelligence, Variable Impact & Pattern Discovery
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![Storage-Parquet](https://img.shields.io/badge/storage-Apache%20Parquet-orange.svg)](https://parquet.apache.org/)
 [![Validation-Pass](https://img.shields.io/badge/validation-100%25%20Passed-brightgreen.svg)]()
-[![Analysis-Ready](https://img.shields.io/badge/data--intelligence-READY%20FOR%20ANALYSIS-success.svg)]()
+[![Pattern-Discovery](https://img.shields.io/badge/pattern--discovery-READY%20FOR%20SEGMENTATION-success.svg)]()
 [![License-Open](https://img.shields.io/badge/data-Open%20Access-green.svg)]()
 
 > **Institution:** Universidad Tecnológica El Retoño (UTR)  
-> **Course:** Data Science (LITD9A) — Sep–Dec 2026  
+> **Course:** Data Science (`LITD9A`) — Sep–Dec 2026  
 > **Professor:** Dr. Sergio Valadez Godínez  
 > **Authors:** Angel Emilio Gutierrez Lozano (ID: 4341) & Emiliano Betanzos Valtierra (ID: 4795)  
 > **Repository:** [https://github.com/AngelGTZ28/TERRA-FIRE](https://github.com/AngelGTZ28/TERRA-FIRE)
@@ -20,11 +20,17 @@
 
 This repository houses:
 1. **Activity 3 (Data Engineering Lab):** Complete, reproducible ETL pipeline that ingests, cleans, harmonizes, and validates multi-source Earth Observation, meteorological reanalysis, and wildfire records into an optimized **Apache Parquet Feature Store** (`data/processed/terra_fire_spatiotemporal_matrix_v1.parquet`).
-2. **Activity 4 (Data Intelligence Lab):** Comprehensive exploratory data analysis (EDA), descriptive statistics (central tendency and dispersion), multivariate hypothesis testing (Welch's $t$-tests), and publication-grade visual analytics (12 analytical dashboards) establishing empirical evidence for predictive modeling.
+2. **Activity 4 (Data Intelligence Lab):** Comprehensive exploratory data analysis (EDA), descriptive statistics (central tendency and dispersion), multivariate hypothesis testing (Welch's $t$-tests), and publication-grade visual analytics (`fig01`–`fig12`).
+3. **Activity 5 (Variable Impact Analysis):** Parametric (Pearson $r$) and non-parametric (Spearman $\rho$) correlation analysis, Ordinary Least Squares (OLS) simple regression modeling across continuous physical systems ($N = 18,275$) and quantile-binned empirical ignition probabilities ($N = 20$), 95% confidence interval estimation, Variance Inflation Factor (VIF) multicollinearity diagnostics, spatial confounding resolution, and multi-criteria Variable Impact Ranking (`fig13`–`fig20`).
+4. **Activity 6 (Pattern Discovery Challenge):** Multivariate Z-score standardization (`StandardScaler`) and Principal Component Analysis (`PCA(n_components=3)`) across the 12-variable Core Spatiotemporal Matrix (**75.0% dimensionality reduction compressing 12 variables into strictly 3 orthogonal components `['PC1', 'PC2', 'PC3']` while retaining 87.87% of total variance with $\text{VIF} = 1.00$**), 2D/3D PCA biplots, seasonal hysteresis loop discovery, Hotelling's $T^2$ & Q-residual outlier diagnostics, and identification of the **Quadrant IV Pyro-Anthropogenic Convergence Zone** capturing **68.61% of all wildfires** (`fig21`–`fig27`).
 
 ---
 
-## 🛰️ 2. Primary Datasets & Sources of Origin
+## 🛰️ 2. Dataset Used & Primary Sources of Origin
+
+- **Analysis-Ready Dataset:** `data/processed/terra_fire_spatiotemporal_matrix_v1.parquet` (0.30 MB, Snappy Columnar)
+- **Dimensions:** 18,275 daily observations $\times$ 22 attributes (25 regional monitoring nodes $\times$ 731 days across 2023–2024).
+- **Target Variable (`fire_ignition_48h`):** Binary indicator $\{0, 1\}$ with **876 positive ignition windows (4.79%)** and **17,399 baseline windows (95.21%)**.
 
 | Dataset Name | Source / Provider | Temporal Coverage | Native Format | Origin URL / Discovery |
 | :--- | :--- | :--- | :---: | :--- |
@@ -36,13 +42,18 @@ This repository houses:
 
 ---
 
-## 🗄️ 3. Architecture & Four-Layer Computing Model
+## 🔬 3. Variables Analyzed & Statistical Techniques (Activities 5 & 6)
 
-In strict accordance with the academic guidelines, four computing layers are decoupled:
-1. **Layer 1: Project Repository (GitHub):** Source code (`src/`), executable notebooks (`notebooks/`), metadata dictionaries (`metadata/`), visual dashboards (`reports/figures/`), representative sample datasets (`data/sample/`), and compressed Parquet artifacts (`data/processed/`).
-2. **Layer 2: Development Environment (GitHub Codespaces / VS Code):** Linux/Windows workstation environment running Python 3.10+ and pip virtual environments.
-3. **Layer 3: Data Storage:** Heavy raw files (>72 MB combined) reside in external storage (`TERRAFIRE-db` / institutional cloud storage) and are ignored by `.gitignore`. Small samples (<5 MB) and the compressed Parquet matrix (<1 MB) are maintained within the repository.
-4. **Layer 4: Data Processing:** In-memory vectorized Python + Pandas/PyArrow following a **Scaled Data Pipeline** approach (processing in <3.5 s without unnecessary cluster overhead).
+### Variables Analyzed
+- **Target Variable (1):** `fire_ignition_48h` (Binary 48–72h wildfire emergence; strictly excluded from PCA to prevent Target Leakage).
+- **High-Impact Explanatory Variables (7 Quantitative + 1 Categorical):** `dist_agri_m` (Agricultural parcel distance), `dist_roads_m` (Road network distance), `temp_2m_max_c` (Adiabatically downscaled max temperature), `rh_2m_min_pct` (Min relative humidity), `soil_moist_mean` (Upper 0–7 cm volumetric soil moisture), `vpd_max_kpa` (Daily peak Vapor Pressure Deficit), `ndmi` (Sentinel-2 Canopy Moisture Index), and `fuel_type` (Ecological fuel stratum).
+- **Medium-Impact Covariates & Confounders (5 in Core PCA):** `slope_deg`, `elevation_m`, `vpd_72h_max_kpa`, `precip_72h_sum_mm`, `days_since_rain` (plus `savi` pruned due to collinearity with `ndmi`).
+- **Low-Impact / Redundant Variables Pruned (5):** `nbr` ($\text{VIF} > 100$ collinear with `ndmi`), `wind_v10_mean` (statistically non-significant noise, $p = 0.621$), `wind_speed_max_kmh`, `wind_u10_mean`, and `aspect_rad`.
+
+### Statistical & Multivariate Techniques Implemented
+1. **Parametric & Non-Parametric Correlation Analysis:** Pearson linear correlation ($r$), Point-Biserial correlation ($r_{pb}$), and Spearman rank-order correlation ($\rho$) with two-tailed asymptotic significance tests.
+2. **Simple Linear Regression Modeling (`statsmodels.api.OLS`):** Continuous physical system regressions ($N = 18,275$) and vigintile empirical probability regressions ($N = 20\text{ quantiles}$).
+3. **Principal Component Analysis & Dimensionality Reduction (`StandardScaler` + `PCA(n_components=3)`):** Exploratory eigenvalue spectrum verification (`pca = PCA()`) followed by explicit truncation (`pca_reduced = PCA(n_components=3)`) under the Kaiser Criterion ($\lambda_k \ge 1.0$), generating `X_pca_reduced` ($18,275 \times 3$), Hotelling's $T^2$ Mahalanobis distance, and Q-residuals (SPE).
 
 ---
 
@@ -51,132 +62,103 @@ In strict accordance with the academic guidelines, four computing layers are dec
 ```text
 TERRA-FIRE/
 ├── data/
-│   ├── sample/                     # Representative subsets for rapid testing & git versioning
-│   │   ├── conafor_fires_aguascalientes_sample.csv
-│   │   ├── era5_hourly_sample.csv
-│   │   ├── firms_viirs_sierra_fria_sample.csv
-│   │   ├── sentinel2_stac_sample.json
-│   │   └── terra_fire_matrix_sample.csv
-│   ├── raw/                        # Original raw datasets (unmodified; excluded from Git)
-│   │   ├── README.md               # Acquisition provenance, source URLs & checksums
-│   │   └── .gitkeep
-│   ├── intermediate/               # Temporary cache generated during ETL (excluded from Git)
-│   │   └── .gitkeep
-│   └── processed/                  # Final Analysis-Ready Dataset
+│   ├── sample/                          # Representative subsets for rapid testing & git versioning
+│   ├── raw/                             # Original raw datasets (unmodified; excluded from Git)
+│   ├── intermediate/                    # Temporary cache generated during ETL (excluded from Git)
+│   └── processed/                       # Final Analysis-Ready Dataset
 │       └── terra_fire_spatiotemporal_matrix_v1.parquet (0.30 MB, Snappy Columnar)
-├── metadata/                       # Audit registries, cleaning logs, and validation matrices
-│   ├── cleaning_log.md             # Empirical cleaning rules and affected record counts
-│   ├── data_dictionary.md          # 22-variable data dictionary, schema, and units
-│   ├── integration_record.md       # Spatiotemporal granularity reconciliation
-│   ├── storage_decision_matrix.md  # 4-tier storage classification and scale assessment
-│   ├── transformation_dictionary.md# Biophysical and thermodynamic formulas
-│   └── validation_checklist.md     # 7-point quality assurance checklist (100% Pass)
-├── notebooks/                      # Executable analytical notebooks
-│   ├── data_engineering_lab.ipynb  # Interactive E2E engineering and ETL notebook
-│   └── data_intelligence_lab.ipynb # Complete descriptive statistics and visual analytics
-├── reports/                        # Publication-grade analytical dashboards
-│   └── figures/                    # 12 high-resolution (300 DPI) visual analytics figures
-│       ├── fig01_target_distribution.png
-│       ├── fig02_vpd_distributions.png
-│       ├── fig03_temp_humidity_distributions.png
-│       ├── fig04_biophysical_indices.png
-│       ├── fig05_topography_anthropogenic.png
-│       ├── fig06_fuel_types.png
-│       ├── fig07_comparative_boxplots.png
-│       ├── fig08_anthropogenic_proximity.png
-│       ├── fig09_fuel_type_comparative.png
-│       ├── fig10_seasonality_timeline.png
-│       ├── fig11_thermodynamic_phase_space.png
-│       └── fig12_topographic_niche.png
-├── src/                            # Modular Python packages
-│   ├── __init__.py
-│   ├── clean.py                    # Spatial bounds clipping and categorical encoding
-│   ├── data_intelligence_analysis.py # Standalone statistical engine & dashboard generator
-│   ├── extract.py                  # Ingestion layer and profiling diagnostics
-│   ├── integrate.py                # Spatiotemporal fusion and target label generator
-│   ├── pipeline.py                 # Master orchestrator script (python -m src.pipeline)
-│   ├── transform.py                # Thermodynamic formulas and lapse-rate downscaling
-│   └── validate.py                 # Automated quality assertion suite (Pass/Fail)
-├── .gitignore                      # Protection against large binaries (>50MB) and caches
-├── gemini.md                       # Master project memory, system architecture, and constraints
-├── README.md                       # Comprehensive project documentation
-└── requirements.txt                # Pinned production dependencies
+├── metadata/                            # Audit registries, cleaning logs, and validation matrices
+├── notebooks/                           # Executable analytical notebooks
+│   ├── data_engineering_lab.ipynb       # Activity 3: Interactive E2E engineering and ETL notebook
+│   ├── data_intelligence_lab.ipynb      # Activity 4: Descriptive statistics and visual analytics
+│   ├── variable_impact_analysis.ipynb   # Activity 5: Correlation, regression & impact assessment
+│   └── pattern_discovery_challenge.ipynb# Activity 6: Multivariate PCA (12->3), biplots & pattern discovery
+├── reports/                             # Publication-grade analytical dashboards
+│   └── figures/                         # 27 high-resolution (300 DPI) visual analytics figures
+│       ├── fig01_target_distribution.png ... fig12_topographic_niche.png (Activity 4)
+│       ├── fig13_correlation_heatmaps.png ... fig20_variable_impact_ranking.png (Activity 5)
+│       ├── fig21_pca_explained_variance.png
+│       ├── fig22_pca_component_loadings.png
+│       ├── fig23_pca_2d_biplot_ignition.png
+│       ├── fig24_pca_ecological_regimes.png
+│       ├── fig25_pca_3d_projection.png
+│       ├── fig26_pca_latent_profiles.png
+│       └── fig27_pca_outliers_hotelling.png
+├── src/                                 # Modular Python packages
+│   ├── extract.py, clean.py, transform.py, integrate.py, validate.py, pipeline.py
+│   ├── data_intelligence_analysis.py    # Activity 4 statistical engine & dashboard generator
+│   ├── variable_impact_analysis.py      # Activity 5 correlation, OLS regression & VIF engine
+│   └── pattern_discovery_challenge.py   # Activity 6 multivariate PCA (12->3) & pattern discovery engine
+├── Work/                                # Official Deliverable Markdown Reports & Figures
+│   ├── Activity 5. Variable Impact Analysis.md
+│   ├── Activity 6. Pattern Discovery Challenge.md
+│   ├── variable_impact_analysis.ipynb
+│   ├── pattern_discovery_challenge.ipynb
+│   ├── variable_impact_analysis.py
+│   ├── pattern_discovery_challenge.py
+│   └── figures/
+├── .gitignore
+├── gemini.md                            # Master project memory, system architecture, and context
+├── README.md                            # Comprehensive project documentation
+└── requirements.txt                     # Pinned production dependencies
 ```
 
 ---
 
 ## ⚙️ 5. Dependencies & Environment Setup
 
-### Installation
+### Core Dependencies (`requirements.txt`)
+- `pandas>=2.2.0`, `numpy>=1.26.0`, `pyarrow>=15.0.0`, `fastparquet>=2024.2.0`
+- `scipy>=1.12.0`, `statsmodels>=0.14.0`, `scikit-learn>=1.4.0`
+- `matplotlib>=3.8.0`, `seaborn>=0.13.0`, `plotly>=5.20.0`, `jupyterlab>=4.1.0`
+
+### Installation & Execution
 ```bash
-# 1. Clone repository
+# 1. Clone repository & activate environment
 git clone https://github.com/AngelGTZ28/TERRA-FIRE.git
 cd TERRA-FIRE
-
-# 2. Create virtual environment
 python3 -m venv .venv
-source .venv/bin/activate  # Linux/Mac
-# .venv\Scripts\activate   # Windows
-
-# 3. Install pinned dependencies
-pip install --upgrade pip
+source .venv/bin/activate
 pip install -r requirements.txt
-```
 
----
-
-## 🚀 6. Execution Instructions
-
-### A. Run Data Engineering (ETL Pipeline)
-```bash
+# 2. Run Activity 3 (ETL Pipeline)
 python -m src.pipeline
-```
 
-### B. Run Data Intelligence Analysis (Statistics & Visual Dashboards)
-```bash
+# 3. Run Activity 4 (Data Intelligence Lab)
 python src/data_intelligence_analysis.py
+
+# 4. Run Activity 5 (Variable Impact Analysis)
+python src/variable_impact_analysis.py
+
+# 5. Run Activity 6 (Pattern Discovery Challenge)
+python src/pattern_discovery_challenge.py
+
+# 6. Launch Interactive Jupyter Notebooks
+jupyter lab notebooks/pattern_discovery_challenge.ipynb
 ```
-*Outputs all 12 publication charts into `reports/figures/` and prints comprehensive central tendency, dispersion, and comparative matrices to console in <3.0 seconds.*
-
-### C. Launch Interactive Jupyter Notebooks
-```bash
-# Data Engineering Pipeline Notebook
-jupyter lab notebooks/data_engineering_lab.ipynb
-
-# Data Intelligence Lab Notebook
-jupyter lab notebooks/data_intelligence_lab.ipynb
-```
 
 ---
 
-## 📊 7. Dataset Profile (`matrix_v1.parquet`)
+## 🧠 6. Main Findings (Activities 4, 5 & 6)
 
-- **Total Records:** 18,275 rows (25 monitoring voxels $\times$ 731 continuous days across 2023–2024).
-- **Total Variables:** 22 attributes (18 quantitative, 2 qualitative, 1 temporal, 1 target).
-- **Target Variable (`fire_ignition_48h`):** Binary classification indicating wildfire emergence within 48–72h ($r \le 8.5\text{ km}$).
-  - Non-ignition baseline: **17,399 records (95.21%)**
-  - Positive anticipatory ignition: **876 records (4.79%)**
-- **Missing Values:** Exactly 0 across all 402,050 data points (100% complete).
-- **Memory Footprint:** 1.63 MB uncompressed in RAM, 0.30 MB serialized in Apache Parquet (92% compression).
-
----
-
-## 🧠 8. Main Data Intelligence Findings
-
-1. **Anthropogenic Proximity Triggers Wildfires:** Ignitions occur at a mean distance of **651.6 m** (median **420.0 m**) from agricultural parcels, contrasted with **1,650.7 m** (median **1,200.0 m**) for baseline conditions ($p < 10^{-30}$), proving that traditional agricultural burns (*roza y quema*) along agrarian borders are the primary wildfire vector.
-2. **Extreme Combustible Selectivity:** **63.58%** of all detected ignitions (557 of 876 positive events) concentrate in *Pastizal Inducido*, with an additional **17.92%** in *Matorral Xerófilo*, while dense temperate forests contribute $<5\%$ combined.
-3. **Thermodynamic Desiccation Precursors:** Prior to ignition, $VPD_{max}$ surges by **+16.38%** (mean $2.21\text{ kPa}$, median $2.09\text{ kPa}$) and relative humidity plunges to a critical median of **18.0%**, establishing atmospheric suction as an anticipatory precursor detectable 48–72h ahead.
-4. **Foothill Valley Clustering:** Wildfires concentrate in low-elevation valleys (mean $2,004.9\text{ msnm}$, mean slope $9.29^\circ$) where human accessibility and agricultural plots intersect fine fuels.
-5. **Readiness Classification:** **READY FOR ADVANCED ANALYSIS** (TRL 3 proof-of-concept ready for 5-Fold Spatially Blocked Cross-Validation with XGBoost/LightGBM).
+1. **Anthropogenic Proximity is the Dominant Rank Predictor of Ignition:** `dist_agri_m` exhibits the strongest rank correlation with `fire_ignition_48h` ($\rho = -0.2155, p = 6.36 \times 10^{-191}$, Cohen's $d = -0.993$), followed by `dist_roads_m` ($\rho = -0.2063$), proving escaped agricultural burns (*roza y quema* under NOM-015) are the primary wildfire trigger.
+2. **High Explanatory Power in Quantile Ignition Probability Regressions:** Across 20 equal-frequency quantiles ($N = 20$), simple OLS regressions prove that `temp_2m_max_c` ($R^2 = 0.8930$), `rh_2m_min_pct` ($R^2 = 0.8232$), `vpd_max_kpa` ($R^2 = 0.7816$), and `soil_moist_mean` ($R^2 = 0.7803$) linearly explain **78% to 89% of the variance in 48–72h wildfire ignition probability**.
+3. **High-Efficiency PCA Dimensionality Reduction (Activity 6):** Applying `PCA(n_components=3)` to the 12 standardized High/Medium-Impact spatiotemporal variables compresses the feature space into the reduced matrix `X_pca_reduced` ($18,275 \times 3$, columns `['PC1', 'PC2', 'PC3']`), achieving a **75.0% reduction in dimensions while retaining 87.87% of total variance** ($\text{VIF} = 1.00$):
+   - **$\text{PC1}$ ($40.76\%, \lambda_1 = 4.8918$):** *Atmospheric-Edaphic Desiccation & Drought Stress Continuum* ($d = +0.760$).
+   - **$\text{PC2}$ ($33.41\%, \lambda_2 = 4.0088$):** *Orographic Altitude vs. Anthropogenic Agricultural Valley Interface* ($d = -0.738$).
+   - **$\text{PC3}$ ($13.70\%, \lambda_3 = 1.6440$):** *Vegetative Canopy Phenology & Warm Monsoon Hydration Regime*.
+4. **Discovery of the Quadrant IV Pyro-Anthropogenic Convergence Zone ($28.1\times$ Risk Amplification):** In the reduced $(\text{PC1}, \text{PC2})$ plane, **Quadrant IV ($\text{PC1} > 0 \land \text{PC2} \le 0$)** contains $28.50\%$ of observations but concentrates **68.61% of all regional wildfires ($601 / 876$)** at an **11.54% ignition rate** ($28.1\times$ higher than Quadrant II's $0.41\%$), reaching **23.34%** in the **Extreme Apex ($\text{PC1} > 2.5 \land \text{PC2} < -1.0$)**.
+5. **Readiness Classification:** **READY FOR SEGMENTATION**.
 
 ---
 
-## 🗺️ 9. Project Roadmap & Upcoming Steps
+## 🗺️ 7. Project Roadmap & Upcoming Steps
 1. **Activity 3 (Completed):** Data Engineering Lab — ETL pipeline, Parquet Feature Store, and 7-gate validation suite (**READY FOR ANALYSIS**).
 2. **Activity 4 (Completed):** Data Intelligence Lab — Statistical profiling, dispersion analysis, bivariate group contrasts, and visual dashboards (**READY FOR ADVANCED ANALYSIS**).
-3. **Activity 5 (Next):** Predictive Machine Learning — 5-Fold Blocked Spatial Cross-Validation with XGBoost & LightGBM; PR-AUC and Brier Score optimization.
-4. **Activity 6:** Explainable AI (XAI) — TreeSHAP sub-second edge explainability calculation for NOM-015 agricultural burn permits.
-5. **Activity 7:** Offline-First PWA Implementation — MapLibre GL vector tiles (`.pbf`, $<12\text{ MB}$) for community brigades in cellular dead zones.
+3. **Activity 5 (Completed):** Variable Impact Analysis — Correlation matrices, OLS regression modeling, VIF multicollinearity diagnostics, confounding analysis, and Variable Impact Ranking (**READY FOR PATTERN DISCOVERY**).
+4. **Activity 6 (Completed):** Pattern Discovery Challenge — Multivariate 12-to-3 PCA dimensionality reduction (`X_pca_reduced` $18,275 \times 3$), 2D/3D biplots, seasonal hysteresis loop, and Hotelling's $T^2$ outlier diagnostics (`fig21`–`fig27`, **READY FOR SEGMENTATION**).
+5. **Next Stage (Intelligent Segmentation Lab):** Unsupervised clustering ($K$-Means, Gaussian Mixture Models, DBSCAN) exclusively in the orthogonal 3D PCA subspace (`['PC1', 'PC2', 'PC3']`) to segment micro-territorial pyro-climatic risk regimes.
+6. **Machine Learning Challenge & Model Performance Validation:** 5-Fold Spatially Blocked Cross-Validation (`GroupKFold` by `voxel_id`) with XGBoost & LightGBM; PR-AUC, Brier Score, and TreeSHAP explainability.
 
 ---
 
@@ -184,5 +166,5 @@ jupyter lab notebooks/data_intelligence_lab.ipynb
 - **Angel Emilio Gutierrez Lozano** (ID: 4341)
 - **Emiliano Betanzos Valtierra** (ID: 4795)
 - **Docente Asesor:** Dr. Sergio Valadez Godínez
-- **Carrera:** Ingeniería en Tecnologías de la Información e Innovación Digital (LITD9A)
+- **Carrera:** Ingeniería en Tecnologías de la Información e Innovación Digital (`LITD9A`)
 - **Universidad Tecnológica El Retoño** — 2026
