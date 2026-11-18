@@ -1,6 +1,6 @@
 # 🧠 TERRA-FIRE: Master Project Memory & Context (`gemini.md`)
 > **AI Assistant Reference Manual & Technical Knowledge Base**  
-> **Last Updated:** October 27, 2026 | **Project Status:** TRL 3 Validated ➔ **READY FOR SEGMENTATION** (Activities 3, 4, 5 & 6 Complete)
+> **Last Updated:** November 17, 2026 | **Project Status:** TRL 3 Validated ➔ **READY FOR ADVANCED ANALYTICS** (Activities 3, 4, 5, 6, 7 & 8 Complete)
 
 ---
 
@@ -91,7 +91,7 @@ $$v_{10} = -(ws_{kmh} / 3.6) \cdot \cos(\theta_{rad}) \quad (\text{meridional, s
 
 ---
 
-## 🔬 6. Empirical Intelligence & Variable Impact Reference (Activities 4, 5 & 6)
+## 🔬 6. Empirical Intelligence, Variable Impact, PCA, Supervised ML & Segmentation Reference (Activities 4, 5, 6, 7 & 8)
 
 ### A. Key Group Contrasts (Activity 4 — Data Intelligence Lab)
 - **Anthropogenic Proximity Shift:** `dist_agri_m` drops from a baseline mean of $1,650.7\text{ m}$ (median $1,200\text{ m}$) to **$651.6\text{ m}$** (median **$420\text{ m}$**, $\Delta = -60.53\%, p < 10^{-30}$) during ignitions; `dist_roads_m` drops from median $480\text{ m}$ to **$150\text{ m}$** ($\Delta = -62.32\%$).
@@ -146,17 +146,38 @@ $$v_{10} = -(ws_{kmh} / 3.6) \cdot \cos(\theta_{rad}) \quad (\text{meridional, s
    - **Composite Latent Super-Feature ($\text{Pyro\_PC\_Index} = \text{PC1} - \text{PC2}$):** Achieves Cohen's $d = +1.0586$ ($t = +35.80, p = 1.29 \times 10^{-195}$).
    - **Hotelling's $T^2$ & Q-Residual Outliers (`fig27`):** Top 1% outliers ($T^2 > 10.96, Q > 8.75$) are high-altitude convective monsoon deluges (`precip_72h_sum_mm` up to $77.7\text{ mm}$, $0.00\%$ fire rate).
 
+### D. Supervised Machine Learning Benchmark Reference (Activity 7 — Machine Learning Challenge)
+1. **Leakage-Free 80/20 Stratified Partition (`random_state=42`):**
+   - Training Set: $N_{\text{train}} = 14,620$ ($701$ ignitions, $4.79\%$ prevalence). Testing Set: $N_{\text{test}} = 3,655$ ($175$ ignitions, $4.79\%$ prevalence). `StandardScaler` and `PCA(n_components=3)` fitted strictly on `X_train`.
+2. **Orthogonal PCA ($p=3$) Rescues Generative Naive Bayes (`GaussianNB`):**
+   - In 12D raw space ($\text{Max VIF} = 80.05$), collinearity inflates `GaussianNB` Brier error to $0.2212$ ($\text{PR-AUC} = 0.1269, \text{F1} = 0.2245$). Projecting to `PC1–PC3` ($\text{VIF} = 1.00$) cuts Brier error by **80.5% ($0.2212 \to 0.0430$)**, boosts $\text{PR-AUC}$ by **+25.2% ($0.1589$)**, and lifts $\text{F1-Score}$ by **+18.3% ($0.2655$)**.
+3. **Selected Best Overall Predictive Model (`MLPClassifier` $64 \times 32$ ReLU) & Screening Companion (`SVC` RBF):**
+   - **3D PCA Subspace (`PC1, PC2, PC3`):** `MLPClassifier` achieves **Test $\text{ROC-AUC} = 0.8205$ ($5\text{-Fold CV } 0.8201 \pm 0.0158$), $\text{PR-AUC} = 0.1715$ ($3.58\times$ lift), $\text{Accuracy} = 89.22\%$** ($1.39\text{ ms}$ test inference). `SVC (RBF, class_weight='balanced')` achieves **Test $\text{ROC-AUC} = 0.8110$, $\text{Brier Score} = 0.0427$, F1-Calibrated Recall $= 61.14\%$, and Balanced Hyperplane Recall $= 77.71\%$**.
+   - **12D Standardized Physical Space (`X_12`):** `MLPClassifier` exploits the residual $12.13\%$ micro-territorial variance (`dist_agri_m`, `dist_roads_m`) to reach **Test $\text{ROC-AUC} = 0.9049$ ($5\text{-Fold CV } 0.8946 \pm 0.0166$), $\text{PR-AUC} = 0.2839$ ($5.93\times$ lift), $\text{F1-Score} = 0.3974$, $\text{Precision} = 32.16\%$, $\text{Recall} = 52.00\%$ ($59.43\%$ at $\tau=0.50$), and $\text{Accuracy} = 92.45\%$** ($3.00\text{ ms}$ inference, $147.2\text{ KB}$ artifact in `models/mlp_ann_model.pkl`). `SVC (RBF)` achieves the lowest **$\text{Brier Score} = 0.0415$** and peak **Screening Recall $= 79.43\%$** (`models/svm_rbf_model.pkl`).
+
+### E. Unsupervised Intelligent Segmentation Reference (Activity 8 — Intelligent Segmentation Lab)
+1. **Orthogonal 3D PCA K-Means Configuration (`KMeans(n_clusters=4, init='k-means++', n_init=20, max_iter=300, random_state=42)`):**
+   - Strictly excludes `fire_ignition_48h` during clustering. Clustering in 3D orthogonal PCA space (`['PC1', 'PC2', 'PC3']`, $87.87\%$ variance, $\text{VIF} = 1.00$) eliminates 12D collinear Euclidean distance distortion ($\text{Max VIF} = 80.10$), lifting Silhouette Score across all $K \in \{2..8\}$ by $+13.2\%$ to $+28.9\%$ (**$+21.7\%$ at $K^*=4$: $0.2496 \to 0.3039$**).
+   - **Optimal Cluster Count ($K^* = 4$):** Selected via Elbow inflection ($\text{WCSS} = 73,645.77$, explaining **$61.78\%$** of 3D variance before marginal WCSS drops flatten by $>54\%$ at $K=5$), **Mean Silhouette Score $= 0.3039$** ($97.18\%$ positive sample silhouettes), **global minimum Davies-Bouldin Index ($1.0474$)**, and **global maximum Calinski-Harabasz Index ($9,844.88$)**. Unlocks `PC3` (*Canopy Phenology & Monsoon*) which $K=3$ leaves near zero.
+2. **The 4 Discovered Pyro-Climatic & Territorial Regimes (`models/kmeans_segmentation_model.pkl`, `fig34`–`fig37`):**
+   - **Cluster 0 (*Dormant Cured-Biomass Agricultural Valley*, $N = 5,815 [31.82\%]$):** Centroid $\boldsymbol{\mu}_0 = (+0.262, -0.602, -1.186)$, $\bar{s}_0 = 0.3373$. Lowest foliar moisture (`ndmi` $= -0.007, Z = -0.77$), cool-dry winter/early-spring weather ($22.17^\circ\text{C}$, $\text{RH} = 26.09\%$, $\text{VPD} = 1.66\text{ kPa}$), close agricultural/road proximity ($\text{Dist}_{\text{agri}} = 1,060.5\text{ m}$). Post-hoc wildfire hazard: **$5.86\%$ ($341$ fires, $38.93\%$ of all fires, $1.22\times$ lift)** — driven by cured grasses and *NOM-015* winter/spring agricultural burns (`Nov–Feb`).
+   - **Cluster 1 (*High-Altitude Sierra Fría Forest Sanctuary*, $N = 3,042 [16.65\%]$):** Centroid $\boldsymbol{\mu}_1 = (-1.336, +3.300, +0.002)$, $\bar{s}_1 = 0.2521$. Highest elevation ($2,765.6\text{ m}$), steep canyons ($30.34^\circ$), remote from agriculture ($3,967.9\text{ m}$) and roads ($1,775.2\text{ m}$), cool microclimate ($20.04^\circ\text{C}$), and **$100.0\%$ temperate forest** (*Bosque de Pino* $67.65\%$, *Pino-Encino* $32.35\%$). Post-hoc wildfire hazard: **$0.66\%$ ($20$ fires, $2.28\%$ of all fires, $0.14\times$ lift)**.
+   - **Cluster 2 (*Extreme Heatwave & Drought Desiccation Apex*, $N = 4,695 [25.69\%]$):** Centroid $\boldsymbol{\mu}_2 = (+2.662, +0.106, +0.681)$, $\bar{s}_2 = 0.2883$. Peak temperature ($28.62^\circ\text{C}$), extreme atmospheric suction ($\text{VPD}_{\max} = 2.89\text{ kPa}, \text{VPD}_{72\text{h}} = 3.05\text{ kPa}$), minimum RH ($13.54\%$), depleted soil moisture ($0.158\text{ m}^3/\text{m}^3$), and $34.7$ rainless days (`Mar–Jun`). Post-hoc wildfire hazard: **$8.26\%$ ($388$ fires, $44.29\%$ of all fires, $1.72\times$ lift, $12.57\times$ higher than Cluster 1)**. Together, **Clusters 2 and 0 capture $83.22\%$ of all regional wildfires ($729 / 876$)**.
+   - **Cluster 3 (*Warm Monsoon Hydrated & Green-Up Valley*, $N = 4,723 [25.84\%]$):** Centroid $\boldsymbol{\mu}_3 = (-2.109, -1.487, +0.782)$, $\bar{s}_3 = 0.3114$. Active summer monsoon rainfall ($\text{Precip}_{72\text{h}} = 14.46\text{ mm}$, $0.8\text{ d}$ since rain), high RH ($48.69\%$), saturated soil ($0.342\text{ m}^3/\text{m}^3$), and peak canopy greenness (`ndmi` $= +0.323$) (`Jul–Oct`). Suppresses valley wildfire hazard by $67.5\%$ relative to Cluster 2 (**$2.69\%$ hazard, $127$ fires, $14.50\%$ share**).
+
 ---
 
 ## 💻 7. Quick Execution & Command Reference
 
 ### Python Environment Setup
 ```bash
-cd /home/eduardo/Workspaces/TERRA-FIRE/TERRA-FIRE
-/home/eduardo/Downloads/Terra-fire/.venv/bin/python --version
+cd TERRA-FIRE
+python -m venv .venv
+source .venv/bin/activate  # Windows PowerShell: .venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 ```
 
-### Run Standalone Analytical Engines
+### Run Standalone Analytical & Machine Learning Engines
 ```bash
 # Activity 3: Full ETL Pipeline & 7-Gate QA Validation
 python -m src.pipeline
@@ -169,6 +190,12 @@ python src/variable_impact_analysis.py
 
 # Activity 6: Multivariate PCA (12 -> 3 Dimensions) & Pattern Discovery (fig21 - fig27)
 python src/pattern_discovery_challenge.py
+
+# Activity 7: Supervised ML Classification (Naive Bayes, SVM, MLP) & Evaluation (fig28 - fig33)
+python src/machine_learning_challenge.py
+
+# Activity 8: Unsupervised K-Means Intelligent Segmentation & Centroid Cartography (fig34 - fig37)
+python src/intelligent_segmentation_lab.py
 ```
 
 ### Launch Interactive Notebooks
@@ -177,6 +204,8 @@ jupyter lab notebooks/data_engineering_lab.ipynb
 jupyter lab notebooks/data_intelligence_lab.ipynb
 jupyter lab notebooks/variable_impact_analysis.ipynb
 jupyter lab notebooks/pattern_discovery_challenge.ipynb
+jupyter lab notebooks/machine_learning_challenge.ipynb
+jupyter lab notebooks/intelligent_segmentation_lab.ipynb
 ```
 
 ---
@@ -186,5 +215,6 @@ jupyter lab notebooks/pattern_discovery_challenge.ipynb
 2. **Activity 4 (Completed):** Data Intelligence Lab — Central tendency, dispersion, Welch's $t$-tests, and 12 visual dashboards (**READY FOR ADVANCED ANALYSIS**).
 3. **Activity 5 (Completed):** Variable Impact Analysis — Pearson/Spearman correlations, 12 OLS regressions, VIF multicollinearity diagnostics, confounding proof, and Variable Impact Ranking (**READY FOR PATTERN DISCOVERY**).
 4. **Activity 6 (Completed):** Pattern Discovery Challenge — Unified 12-to-3 Spatiotemporal PCA (`PCA(n_components=3)` retaining $87.87\%$ variance in `['PC1', 'PC2', 'PC3']`), Quadrant IV discovery ($68.61\%$ of fires), seasonal hysteresis loop, and Hotelling's $T^2$ outlier diagnostics (`fig21`–`fig27`, **READY FOR SEGMENTATION**).
-5. **Next Activity (Intelligent Segmentation Lab):** Unsupervised clustering ($K$-Means, Gaussian Mixture Models, DBSCAN) exclusively in the orthogonal 3D PCA subspace (`['PC1', 'PC2', 'PC3']`) evaluated via Silhouette Score and Davies-Bouldin Index to segment micro-territorial pyro-climatic risk clusters.
-6. **Subsequent Activities (Machine Learning Challenge & Model Performance Validation):** 5-Fold Spatially Blocked Cross-Validation (`GroupKFold` by `voxel_id`) with XGBoost & LightGBM (`scale_pos_weight = 19.86`); PR-AUC, Brier Score calibration, and TreeSHAP explainability.
+5. **Activity 7 (Completed):** Machine Learning Challenge — Leakage-free 80/20 supervised classification (`GaussianNB`, `SVC` RBF, `MLPClassifier` $64 \times 32$) across PCA 3D and Original 12D (`MLP` Test $\text{ROC-AUC} = 0.8205$ in 3D / $0.9049$ in 12D; `SVC` Balanced Recall $= 77.71\%$ in 3D / $79.43\%$ in 12D), serialized models in `models/*.pkl`, and decision boundary cartography (`fig28`–`fig33`, **READY FOR MODEL VALIDATION**).
+6. **Activity 8 (Completed):** Intelligent Segmentation Lab — Unsupervised $K$-Means (`K*=4`, `init='k-means++'`) in the 3D Orthogonal PCA Subspace ($\text{WCSS} = 73,645.77, 61.78\%$ variance explained, $\text{Silhouette} = 0.3039 [+21.7\%\text{ vs. 12D}], \text{DBI} = 1.0474$), uncovering 4 pyro-climatic regimes where Cluster 2 ($8.26\%$ hazard) and Cluster 0 ($5.86\%$ hazard) capture $83.22\%$ of all regional wildfires (`models/kmeans_segmentation_model.pkl`, `fig34`–`fig37`, **READY FOR ADVANCED ANALYTICS**).
+7. **Upcoming Advanced Analytical Stages:** *Model Performance Validation* (5-Fold Spatially Blocked `GroupKFold` by `voxel_id` & regime-stratified calibration), *Explainable AI Workshop* (SHAP/LIME cluster-conditioned attribution), *Deep Learning Innovation Lab* (Temporal 1D-CNN/LSTM sequence modeling), and *Predictive Intelligence Engine* (Hybrid supervised + unsupervised offline tactical PWA).

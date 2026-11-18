@@ -1,0 +1,580 @@
+{
+  "activity": "Activity 8 - Intelligent Segmentation Lab",
+  "readiness_decision": "READY FOR ADVANCED ANALYTICS",
+  "optimal_k": 4,
+  "model_artifact_path": "models/kmeans_segmentation_model.pkl",
+  "model_artifact_size_kb": 146.8740234375,
+  "dataset_preparation": {
+    "n_observations": 18275,
+    "n_original_features": 12,
+    "n_pca_components": 3,
+    "pca_eigenvalues": [
+      4.89182430048718,
+      4.008830971478888,
+      1.6439581806362755
+    ],
+    "pca_explained_variance_pct": [
+      40.76297185002404,
+      33.40509675002517,
+      13.698901866369036
+    ],
+    "pca_cumulative_variance_pct": 87.86697046641825,
+    "total_ss_pca_3d": 192692.2662328551,
+    "total_ss_orig_12d": 219300.0,
+    "vif_12_max": 80.09967706747953,
+    "vif_12_mean": 30.742633519292223,
+    "vif_12_dict": {
+      "dist_agri_m": 80.09967706747953,
+      "dist_roads_m": 71.42380739406642,
+      "temp_2m_max_c": 22.6351274316099,
+      "rh_2m_min_pct": 10.145014714515744,
+      "soil_moist_mean": 7.160208682372317,
+      "vpd_max_kpa": 39.23672957609731,
+      "ndmi": 5.7724738992563935,
+      "slope_deg": 59.9252610061324,
+      "elevation_m": 56.62826185563352,
+      "vpd_72h_max_kpa": 11.642934519082864,
+      "precip_72h_sum_mm": 2.2769835631491437,
+      "days_since_rain": 1.965122522111153
+    },
+    "vif_pca_max": 1.0,
+    "vif_pca_dict": {
+      "PC1": 1.0,
+      "PC2": 1.0,
+      "PC3": 1.0
+    }
+  },
+  "k_evaluation_matrix": [
+    {
+      "K": 2,
+      "Inertia_PCA_3D": 133517.11288488662,
+      "Var_Explained_PCA_Pct": 30.709667027559608,
+      "Silhouette_PCA_3D": 0.28773876836856466,
+      "Davies_Bouldin_PCA_3D": 1.3705861084834867,
+      "Calinski_Harabasz_PCA_3D": 8098.706481685973,
+      "Inertia_Orig_12D": 159889.26993266752,
+      "Var_Explained_12D_Pct": 27.091076182094152,
+      "Silhouette_Orig_12D": 0.25325385925018007,
+      "Silhouette_Lift_Pct": 13.61673587936057,
+      "Fit_Time_ms": 133.89170000004924,
+      "Interpretation": "Coarse binary split (Humid/Mountain vs. Dry/Valley); under-segments seasonal canopy phenology (PC3) and merges moderate winter dryness with extreme spring heatwaves.",
+      "WCSS_Drop_PCA": 0.0,
+      "WCSS_Drop_Pct": 0.0
+    },
+    {
+      "K": 3,
+      "Inertia_PCA_3D": 93432.9796813681,
+      "Var_Explained_PCA_Pct": 51.51181647920373,
+      "Silhouette_PCA_3D": 0.32075452092373635,
+      "Davies_Bouldin_PCA_3D": 1.0564736774195398,
+      "Calinski_Harabasz_PCA_3D": 9705.826390607275,
+      "Inertia_Orig_12D": 119780.70797466056,
+      "Var_Explained_12D_Pct": 45.38043412008182,
+      "Silhouette_Orig_12D": 0.27788560212904356,
+      "Silhouette_Lift_Pct": 15.426822572399942,
+      "Fit_Time_ms": 78.77829999983987,
+      "Interpretation": "Global Silhouette maximum (0.3208); separates Moist Valley, Dry Valley, and Sierra Fria Sanctuary in 2D (PC1-PC2), but leaves PC3 centroids near zero (ignores foliar senescence vs. heatwave).",
+      "WCSS_Drop_PCA": -40084.13320351852,
+      "WCSS_Drop_Pct": -30.021719566448034
+    },
+    {
+      "K": 4,
+      "Inertia_PCA_3D": 73645.76968447465,
+      "Var_Explained_PCA_Pct": 61.78063026386389,
+      "Silhouette_PCA_3D": 0.30386404319433397,
+      "Davies_Bouldin_PCA_3D": 1.0473586472175798,
+      "Calinski_Harabasz_PCA_3D": 9844.87765688516,
+      "Inertia_Orig_12D": 99558.23919941147,
+      "Var_Explained_12D_Pct": 54.60180611061949,
+      "Silhouette_Orig_12D": 0.24964842799507359,
+      "Silhouette_Lift_Pct": 21.71678613587354,
+      "Fit_Time_ms": 78.99339999994481,
+      "Interpretation": "Optimal Elbow inflection & physical segmentation (Silhouette = 0.3039, 61.78% 3D variance explained); unlocks PC3 to separate Dormant Cured-Biomass Valley (C0) from Extreme Heatwave Apex (C2), Mountain Sanctuary (C1), and Monsoon Valley (C3).",
+      "WCSS_Drop_PCA": -19787.20999689345,
+      "WCSS_Drop_Pct": -21.177971701612453
+    },
+    {
+      "K": 5,
+      "Inertia_PCA_3D": 64616.08256073202,
+      "Var_Explained_PCA_Pct": 66.4666964461106,
+      "Silhouette_PCA_3D": 0.2995918589235357,
+      "Davies_Bouldin_PCA_3D": 1.0993369267258806,
+      "Calinski_Harabasz_PCA_3D": 9053.371972479965,
+      "Inertia_Orig_12D": 89485.36013128761,
+      "Var_Explained_12D_Pct": 59.195002220115086,
+      "Silhouette_Orig_12D": 0.23659757613259905,
+      "Silhouette_Lift_Pct": 26.625075294783258,
+      "Fit_Time_ms": 81.595100000186,
+      "Interpretation": "Diminishing marginal WCSS gain (-12.26% vs -21.18% at K=4); splits the small Sierra Fria mountain sanctuary (16.6% of data) into two sub-altitude bands with negligible hazard distinction.",
+      "WCSS_Drop_PCA": -9029.687123742631,
+      "WCSS_Drop_Pct": -12.26097189618508
+    },
+    {
+      "K": 6,
+      "Inertia_PCA_3D": 57045.68741428865,
+      "Var_Explained_PCA_Pct": 70.3954452716058,
+      "Silhouette_PCA_3D": 0.2936262796608396,
+      "Davies_Bouldin_PCA_3D": 1.076487262815235,
+      "Calinski_Harabasz_PCA_3D": 8688.275651274926,
+      "Inertia_Orig_12D": 81279.13990070036,
+      "Var_Explained_12D_Pct": 62.937008709210964,
+      "Silhouette_Orig_12D": 0.22771723200676683,
+      "Silhouette_Lift_Pct": 28.943372916158676,
+      "Fit_Time_ms": 98.38600000011866,
+      "Interpretation": "Over-segmentation of baseline valley transitions; Silhouette drops below 0.295 as intermediate weather days fragment into overlapping boundaries.",
+      "WCSS_Drop_PCA": -7570.39514644337,
+      "WCSS_Drop_Pct": -11.715961176272227
+    },
+    {
+      "K": 7,
+      "Inertia_PCA_3D": 50976.44167915487,
+      "Var_Explained_PCA_Pct": 73.54515431483202,
+      "Silhouette_PCA_3D": 0.28682104754844406,
+      "Davies_Bouldin_PCA_3D": 1.0929356792578842,
+      "Calinski_Harabasz_PCA_3D": 8464.310825719598,
+      "Inertia_Orig_12D": 73240.80282842084,
+      "Var_Explained_12D_Pct": 66.60246109055137,
+      "Silhouette_Orig_12D": 0.24789776168641886,
+      "Silhouette_Lift_Pct": 15.701346231299041,
+      "Fit_Time_ms": 138.39859999984583,
+      "Interpretation": "Excessive cluster fragmentation (Silhouette = 0.2868); induces artificial boundaries across continuous meteorological gradients without actionable CONAFOR dispatch value.",
+      "WCSS_Drop_PCA": -6069.24573513378,
+      "WCSS_Drop_Pct": -10.639271801663963
+    },
+    {
+      "K": 8,
+      "Inertia_PCA_3D": 46179.72800937056,
+      "Var_Explained_PCA_Pct": 76.0344673337509,
+      "Silhouette_PCA_3D": 0.2821180463407681,
+      "Davies_Bouldin_PCA_3D": 1.0523436464944833,
+      "Calinski_Harabasz_PCA_3D": 8279.337064399533,
+      "Inertia_Orig_12D": 67164.16581050251,
+      "Var_Explained_12D_Pct": 69.37338540332763,
+      "Silhouette_Orig_12D": 0.2492398279600804,
+      "Silhouette_Lift_Pct": 13.19139828083722,
+      "Fit_Time_ms": 130.42689999997492,
+      "Interpretation": "Severe over-partitioning (Silhouette = 0.2821); high centroid redundancy and reduced operational interpretability.",
+      "WCSS_Drop_PCA": -4796.713669784309,
+      "WCSS_Drop_Pct": -9.409667508718577
+    }
+  ],
+  "cluster_profiles": [
+    {
+      "cluster_id": 0,
+      "cluster_name": "Cluster 0: Dormant Cured-Biomass Agricultural Valley",
+      "short_name": "C0: Dormant Cured Valley",
+      "n_observations": 5815,
+      "pct_of_total": 31.819425444596444,
+      "centroid_PC1": 0.26177841806393964,
+      "centroid_PC2": -0.6024517721993065,
+      "centroid_PC3": -1.1855520823321795,
+      "mean_pyro_index": 0.8630703042725096,
+      "wcss_cluster": 15863.27409123757,
+      "mean_dist_to_centroid": 1.5676770348503553,
+      "std_dist_to_centroid": 0.5200262730340222,
+      "mean_silhouette": 0.33732444442785253,
+      "pct_positive_silhouette": 100.0,
+      "min_inter_centroid_dist": 3.122492497201752,
+      "mean_inter_centroid_dist": 3.5693637819963993,
+      "post_hoc_fires": 341,
+      "post_hoc_fire_rate_pct": 5.86414445399828,
+      "post_hoc_share_of_fires_pct": 38.92694063926941,
+      "post_hoc_risk_lift": 1.223370318456833,
+      "quadrant_iv_overlap_pct": 45.399828030954424,
+      "fuel_composition_pct": {
+        "Pastizal Inducido": 25.073086844368014,
+        "Matorral Xerofilo": 24.849527085124677,
+        "Bosque de Encino": 20.103181427343078,
+        "Matorral Submontano": 20.06878761822872,
+        "Pino-Encino": 9.905417024935511,
+        "Bosque de Pino": 0.0
+      },
+      "top_fuels_summary": "Pastizal Inducido (25.1%), Matorral Xerofilo (24.8%), Bosque de Encino (20.1%)",
+      "top_months": [
+        1,
+        12,
+        2,
+        11
+      ],
+      "raw_means": {
+        "dist_agri_m": 1060.488392089424,
+        "dist_roads_m": 424.98710232158214,
+        "temp_2m_max_c": 22.16898324462943,
+        "rh_2m_min_pct": 26.0859845227859,
+        "soil_moist_mean": 0.2220111780336266,
+        "vpd_max_kpa": 1.6600779842838376,
+        "ndmi": -0.007051360014833005,
+        "slope_deg": 12.972828890799656,
+        "elevation_m": 2139.183147033534,
+        "vpd_72h_max_kpa": 1.812169043831239,
+        "precip_72h_sum_mm": 0.6846603621313107,
+        "days_since_rain": 15.207050730868444
+      },
+      "raw_stds": {
+        "dist_agri_m": 585.9159713218514,
+        "dist_roads_m": 264.97605672047973,
+        "temp_2m_max_c": 2.8454076819732927,
+        "rh_2m_min_pct": 9.219050135667837,
+        "soil_moist_mean": 0.04264556400803749,
+        "vpd_max_kpa": 0.37117314683249997,
+        "ndmi": 0.1135361717605904,
+        "slope_deg": 5.252191819972407,
+        "elevation_m": 204.05422545517402,
+        "vpd_72h_max_kpa": 0.3613098288734183,
+        "precip_72h_sum_mm": 1.5954954489348117,
+        "days_since_rain": 13.755261125132337
+      },
+      "z_means": {
+        "dist_agri_m": -0.41125252710801274,
+        "dist_roads_m": -0.41208828532304365,
+        "temp_2m_max_c": -0.3647399428624682,
+        "rh_2m_min_pct": -0.1804512944201354,
+        "soil_moist_mean": -0.1982209458647579,
+        "vpd_max_kpa": -0.3224325346593394,
+        "ndmi": -0.7652155016561837,
+        "slope_deg": -0.4024700233469702,
+        "elevation_m": -0.39551760158978655,
+        "vpd_72h_max_kpa": -0.3783741637896419,
+        "precip_72h_sum_mm": -0.4140950094783374,
+        "days_since_rain": -0.058578697626530576
+      }
+    },
+    {
+      "cluster_id": 1,
+      "cluster_name": "Cluster 1: High-Altitude Sierra Fria Forest Sanctuary",
+      "short_name": "C1: Sierra Fria Sanctuary",
+      "n_observations": 3042,
+      "pct_of_total": 16.645690834473324,
+      "centroid_PC1": -1.3358414452823344,
+      "centroid_PC2": 3.299659148586007,
+      "centroid_PC3": 0.002126373509269736,
+      "mean_pyro_index": -4.6347789800923405,
+      "wcss_cluster": 20436.838456898306,
+      "mean_dist_to_centroid": 2.4525956890287137,
+      "std_dist_to_centroid": 0.838588042188706,
+      "mean_silhouette": 0.2521169247179757,
+      "pct_positive_silhouette": 91.97896120973044,
+      "min_inter_centroid_dist": 4.380575188298964,
+      "mean_inter_centroid_dist": 4.817866882245426,
+      "post_hoc_fires": 20,
+      "post_hoc_fire_rate_pct": 0.6574621959237344,
+      "post_hoc_share_of_fires_pct": 2.28310502283105,
+      "post_hoc_risk_lift": 0.13715892272267405,
+      "quadrant_iv_overlap_pct": 0.0,
+      "fuel_composition_pct": {
+        "Bosque de Pino": 67.65285996055226,
+        "Pino-Encino": 32.34714003944773,
+        "Bosque de Encino": 0.0,
+        "Matorral Submontano": 0.0,
+        "Matorral Xerofilo": 0.0,
+        "Pastizal Inducido": 0.0
+      },
+      "top_fuels_summary": "Bosque de Pino (67.7%), Pino-Encino (32.3%), Bosque de Encino (0.0%)",
+      "top_months": [
+        1,
+        12,
+        11,
+        3
+      ],
+      "raw_means": {
+        "dist_agri_m": 3967.948717948718,
+        "dist_roads_m": 1775.1643655489809,
+        "temp_2m_max_c": 20.037532022013465,
+        "rh_2m_min_pct": 28.054898093359633,
+        "soil_moist_mean": 0.2328279365140658,
+        "vpd_max_kpa": 1.8649059245736386,
+        "ndmi": 0.1227475746202893,
+        "slope_deg": 30.340565417488495,
+        "elevation_m": 2765.5571992110454,
+        "vpd_72h_max_kpa": 2.0467162942079082,
+        "precip_72h_sum_mm": 3.1635108487992833,
+        "days_since_rain": 15.454963839579225
+      },
+      "raw_stds": {
+        "dist_agri_m": 1232.896803514289,
+        "dist_roads_m": 586.3503199766109,
+        "temp_2m_max_c": 3.5319733494021426,
+        "rh_2m_min_pct": 14.507703926040776,
+        "soil_moist_mean": 0.07177255655403338,
+        "vpd_max_kpa": 0.6628597052561667,
+        "ndmi": 0.17411095021946071,
+        "slope_deg": 4.043933111548871,
+        "elevation_m": 122.1496870771842,
+        "vpd_72h_max_kpa": 0.6493505410574074,
+        "precip_72h_sum_mm": 7.104755879821251,
+        "days_since_rain": 19.655587025006575
+      },
+      "z_means": {
+        "dist_agri_m": 1.7935691824672777,
+        "dist_roads_m": 1.7939536673567995,
+        "temp_2m_max_c": -0.8589661295975056,
+        "rh_2m_min_pct": -0.05982813763973319,
+        "soil_moist_mean": -0.06713926779044721,
+        "vpd_max_kpa": -0.05901369578856773,
+        "ndmi": -0.037963661261998086,
+        "slope_deg": 1.673454572905731,
+        "elevation_m": 1.638207263093132,
+        "vpd_72h_max_kpa": -0.06869463756219876,
+        "precip_72h_sum_mm": -0.1556733365285281,
+        "days_since_rain": -0.04757373301948882
+      }
+    },
+    {
+      "cluster_id": 2,
+      "cluster_name": "Cluster 2: Extreme Heatwave & Drought Desiccation Apex",
+      "short_name": "C2: Extreme Heatwave Apex",
+      "n_observations": 4695,
+      "pct_of_total": 25.690834473324216,
+      "centroid_PC1": 2.6622548969037854,
+      "centroid_PC2": 0.1062535487393173,
+      "centroid_PC3": 0.6813728860827724,
+      "mean_pyro_index": 2.555760931591982,
+      "wcss_cluster": 18375.848637162766,
+      "mean_dist_to_centroid": 1.877318681201255,
+      "std_dist_to_centroid": 0.6242406106036996,
+      "mean_silhouette": 0.2883443105038853,
+      "pct_positive_silhouette": 96.89030883919062,
+      "min_inter_centroid_dist": 3.122492497201752,
+      "mean_inter_centroid_dist": 4.43839964803509,
+      "post_hoc_fires": 388,
+      "post_hoc_fire_rate_pct": 8.264110756123536,
+      "post_hoc_share_of_fires_pct": 44.29223744292237,
+      "post_hoc_risk_lift": 1.724048219956137,
+      "quadrant_iv_overlap_pct": 51.373801916932905,
+      "fuel_composition_pct": {
+        "Pastizal Inducido": 24.004259850905218,
+        "Matorral Xerofilo": 23.322683706070286,
+        "Matorral Submontano": 18.998935037273696,
+        "Bosque de Encino": 18.53035143769968,
+        "Pino-Encino": 13.801916932907348,
+        "Bosque de Pino": 1.34185303514377
+      },
+      "top_fuels_summary": "Pastizal Inducido (24.0%), Matorral Xerofilo (23.3%), Matorral Submontano (19.0%)",
+      "top_months": [
+        5,
+        4,
+        6,
+        3
+      ],
+      "raw_means": {
+        "dist_agri_m": 1153.2545260915867,
+        "dist_roads_m": 469.23961661341855,
+        "temp_2m_max_c": 28.623150159045657,
+        "rh_2m_min_pct": 13.535037273695421,
+        "soil_moist_mean": 0.15758662538819165,
+        "vpd_max_kpa": 2.8933945755862074,
+        "ndmi": 0.10804928260725855,
+        "slope_deg": 13.725239616613418,
+        "elevation_m": 2166.5314164004258,
+        "vpd_72h_max_kpa": 3.0530664295688097,
+        "precip_72h_sum_mm": 0.6798296061059791,
+        "days_since_rain": 34.6604898828541
+      },
+      "raw_stds": {
+        "dist_agri_m": 697.5090915961241,
+        "dist_roads_m": 318.9320915864987,
+        "temp_2m_max_c": 2.8538063393268707,
+        "rh_2m_min_pct": 5.832485943515998,
+        "soil_moist_mean": 0.030498367282740697,
+        "vpd_max_kpa": 0.5323895244388722,
+        "ndmi": 0.12192016165451489,
+        "slope_deg": 6.051319002964158,
+        "elevation_m": 231.05364756263532,
+        "vpd_72h_max_kpa": 0.5314822103488458,
+        "precip_72h_sum_mm": 2.289449859564003,
+        "days_since_rain": 30.148174128026152
+      },
+      "z_means": {
+        "dist_agri_m": -0.3409049511351953,
+        "dist_roads_m": -0.3397845177377398,
+        "temp_2m_max_c": 1.1318076998034798,
+        "rh_2m_min_pct": -0.9493702050295251,
+        "soil_moist_mean": -0.978942682901035,
+        "vpd_max_kpa": 1.2636734623119388,
+        "ndmi": -0.12031687893036054,
+        "slope_deg": -0.3125361433735548,
+        "elevation_m": -0.3067226471625678,
+        "vpd_72h_max_kpa": 1.260018586050534,
+        "precip_72h_sum_mm": -0.4145986187360932,
+        "days_since_rain": 0.8049674474972305
+      }
+    },
+    {
+      "cluster_id": 3,
+      "cluster_name": "Cluster 3: Warm Monsoon Hydrated & Green-Up Valley",
+      "short_name": "C3: Monsoon Hydrated Valley",
+      "n_observations": 4723,
+      "pct_of_total": 25.844049247606023,
+      "centroid_PC1": -2.1085524727300613,
+      "centroid_PC2": -1.4873287230210155,
+      "centroid_PC3": 0.7818576142849692,
+      "mean_pyro_index": -0.6180507592056105,
+      "wcss_cluster": 18969.808499175993,
+      "mean_dist_to_centroid": 1.8455587696606777,
+      "std_dist_to_centroid": 0.7813555354606536,
+      "mean_silhouette": 0.31142441715449226,
+      "pct_positive_silhouette": 97.162820241372,
+      "min_inter_centroid_dist": 3.205023660488482,
+      "mean_inter_centroid_dist": 4.382397440728558,
+      "post_hoc_fires": 127,
+      "post_hoc_fire_rate_pct": 2.6889688757145884,
+      "post_hoc_share_of_fires_pct": 14.49771689497717,
+      "post_hoc_risk_lift": 0.5609692489005035,
+      "quadrant_iv_overlap_pct": 3.3029853906415414,
+      "fuel_composition_pct": {
+        "Matorral Xerofilo": 23.607876349777683,
+        "Pastizal Inducido": 22.65509210247724,
+        "Bosque de Encino": 18.738090196908743,
+        "Matorral Submontano": 18.314630531441882,
+        "Pino-Encino": 15.159856023713742,
+        "Bosque de Pino": 1.5244547956807113
+      },
+      "top_fuels_summary": "Matorral Xerofilo (23.6%), Pastizal Inducido (22.7%), Bosque de Encino (18.7%)",
+      "top_months": [
+        8,
+        7,
+        9,
+        10
+      ],
+      "raw_means": {
+        "dist_agri_m": 1194.0292187169173,
+        "dist_roads_m": 487.27503705272073,
+        "temp_2m_max_c": 23.212476190106234,
+        "rh_2m_min_pct": 48.69150963370739,
+        "soil_moist_mean": 0.34237822860624484,
+        "vpd_max_kpa": 1.2722563015353452,
+        "ndmi": 0.3233859963899041,
+        "slope_deg": 14.067435951725598,
+        "elevation_m": 2179.914249417743,
+        "vpd_72h_max_kpa": 1.5364257718783274,
+        "precip_72h_sum_mm": 14.462417931008233,
+        "days_since_rain": 0.8153715858564472
+      },
+      "raw_stds": {
+        "dist_agri_m": 714.6777298273574,
+        "dist_roads_m": 326.66451532935736,
+        "temp_2m_max_c": 3.166543747327084,
+        "rh_2m_min_pct": 10.976405421232611,
+        "soil_moist_mean": 0.047057360942954284,
+        "vpd_max_kpa": 0.3988524986575325,
+        "ndmi": 0.10983443347496213,
+        "slope_deg": 6.147389739021396,
+        "elevation_m": 235.48335858592037,
+        "vpd_72h_max_kpa": 0.4269883771719363,
+        "precip_72h_sum_mm": 13.508746428863592,
+        "days_since_rain": 1.4223516763311281
+      },
+      "z_means": {
+        "dist_agri_m": -0.30998417581042176,
+        "dist_roads_m": -0.310316613628456,
+        "temp_2m_max_c": -0.12278200647818707,
+        "rh_2m_min_pct": 1.2044494144329398,
+        "soil_moist_mean": 1.2604336966001406,
+        "vpd_max_kpa": -0.8211903565364531,
+        "ndmi": 1.0861954999508256,
+        "slope_deg": -0.271634222290443,
+        "elevation_m": -0.2632709745196789,
+        "vpd_72h_max_kpa": -0.7424459901770666,
+        "precip_72h_sum_mm": 1.0222446082579444,
+        "days_since_rain": -0.6974312393512463
+      }
+    }
+  ],
+  "validation_statistics": {
+    "inter_centroid_distance_matrix": [
+      [
+        0.0,
+        4.380575188298964,
+        3.122492497201752,
+        3.205023660488482
+      ],
+      [
+        4.380575188298964,
+        0.0,
+        5.161781621821819,
+        4.911243836615493
+      ],
+      [
+        3.122492497201752,
+        5.161781621821819,
+        0.0,
+        5.030924825081698
+      ],
+      [
+        3.205023660488482,
+        4.911243836615493,
+        5.030924825081698,
+        0.0
+      ]
+    ],
+    "min_inter_centroid_distance": 3.122492497201752,
+    "max_inter_centroid_distance": 5.161781621821819,
+    "mean_inter_centroid_distance": 4.302006938251368,
+    "anova_f_stats": {
+      "PC1": {
+        "f_stat": 12477.763311993023,
+        "p_val": 0.0
+      },
+      "PC2": {
+        "f_stat": 10113.776312463568,
+        "p_val": 0.0
+      },
+      "PC3": {
+        "f_stat": 4806.281140668112,
+        "p_val": 0.0
+      },
+      "dist_agri_m": {
+        "f_stat": 11016.378621215563,
+        "p_val": 0.0
+      },
+      "dist_roads_m": {
+        "f_stat": 11031.090371551714,
+        "p_val": 0.0
+      },
+      "temp_2m_max_c": {
+        "f_stat": 6045.177742281771,
+        "p_val": 0.0
+      },
+      "rh_2m_min_pct": {
+        "f_stat": 9829.141025155892,
+        "p_val": 0.0
+      },
+      "soil_moist_mean": {
+        "f_stat": 12367.345737154234,
+        "p_val": 0.0
+      },
+      "vpd_max_kpa": {
+        "f_stat": 9860.869645473726,
+        "p_val": 0.0
+      },
+      "ndmi": {
+        "f_stat": 5974.332617289318,
+        "p_val": 0.0
+      },
+      "slope_deg": {
+        "f_stat": 7810.082916941137,
+        "p_val": 0.0
+      },
+      "elevation_m": {
+        "f_stat": 7108.869471217043,
+        "p_val": 0.0
+      },
+      "vpd_72h_max_kpa": {
+        "f_stat": 9010.138676514005,
+        "p_val": 0.0
+      },
+      "precip_72h_sum_mm": {
+        "f_stat": 3620.3739178616893,
+        "p_val": 0.0
+      },
+      "days_since_rain": {
+        "f_stat": 2531.881469899335,
+        "p_val": 0.0
+      }
+    },
+    "post_hoc_fire_chi2": 298.3893568483161,
+    "post_hoc_fire_pval": 2.2200071453844813e-64,
+    "post_hoc_fuel_chi2": 12733.851835769467,
+    "post_hoc_fuel_pval": 0.0
+  }
+}

@@ -243,3 +243,7 @@ data/processed/*.nc
 # Keep representative small sample data in repository
 !data/sample/
 !data/sample/*
+
+# Local technical documentation & audit logs (excluded from Git tracking)
+.ignore/
+.ignore/*
